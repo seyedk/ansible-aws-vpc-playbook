@@ -2,6 +2,7 @@
 
 aws_access_key: ""
 aws_secret_key: ""
+aws_profile: NETWORK
 region: "us-east-1"
 
 # VPC
@@ -24,6 +25,6 @@ ec2_tag: "WebServer"
 
 
 #key storage location
-ec2_key_directory: "/home/vagrant/masonfrank/"
+ec2_key_directory: "/home/ansible/keystore-test/"
 keypair_name: "ansible_key"
 

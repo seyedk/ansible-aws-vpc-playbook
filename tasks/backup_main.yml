@@ -6,7 +6,8 @@
      cidr_block: "{{ vpc_cidr }}"
      region: "{{ region }}"
      state: present
-     profile: {{ aws_profile }}
+     aws_access_key: "{{ aws_access_key }}"
+     aws_secret_key: "{{ aws_secret_key }}"
    register: vpc
 
 
@@ -21,7 +22,8 @@
     vpc_id: "{{ vpc_id }}"
     region: "{{ region }}"
     cidr: "{{ subnet_cidr }}"
-    profile: {{ aws_profile }}
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     map_public: yes
     resource_tags:
       Name: "{{ subnet_name }}"
@@ -31,7 +33,8 @@
    ec2_vpc_igw:
     vpc_id: "{{ vpc_id }}"
     region: "{{ region }}"
-    profile: {{ aws_profile }}
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     state: "present"
     tags:
       Name: "{{ igw_name }}"
@@ -42,7 +45,8 @@
    ec2_vpc_route_table:
     vpc_id: "{{ vpc_id }}"
     region: "{{ region }}"
-    profile: {{ aws_profile }}
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     subnets:
       - "{{ subnet.subnet.id }}"
     routes:
@@ -58,7 +62,8 @@
     description: DMZ Security Group
     vpc_id: "{{ vpc_id }}"
     region: "{{ region }}"
-    profile: {{ aws_profile }}
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     rules:
       - proto: tcp
         ports:
@@ -72,7 +77,8 @@
 
  - name: create a new ec2 key pair, returns generated private key
    ec2_key:
-    profile: {{ aws_profile }}
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
     name: "{{ keypair_name }}"
     region: "{{ region }}"
    register: keypair
@@ -90,7 +96,19 @@
    tags:
     - ec2_key
 
- 
+ - name: Create EC2 Instance
+   ec2:
+    image: ami-467ca739
+    wait: yes
+    instance_type: t2.micro
+    region: "{{ region }}"
+    group_id: "{{ security_group.group_id }}"
+    vpc_subnet_id: "{{ subnet.subnet.id }}"
+    key_name: "{{ keypair.key.name  }}"
+    count_tag: "{{ ec2_tag }}"
+    exact_count: 1
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
 
 
 
