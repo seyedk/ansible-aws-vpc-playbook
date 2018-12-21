@@ -1,0 +1,45 @@
+---
+
+###
+### Asserts
+###
+
+# Assert that vpc peering name is defined
+
+
+
+###
+### Gather facts about existing VPC´s
+###
+
+# gather_facts_requester.yml returns:
+# aws_vpc_peering_requester_id
+# aws_vpc_peering_requester_name
+###
+### Create peering
+###
+- name: " peering DEV VPC to NETWORK"
+  ec2_vpc_peer:
+    # Fixed values
+    state: present
+    # Looked-up values
+    vpc_id: "{{ peering_requestor_id }}"
+    peer_vpc_id: "{{ peering_accepter_id }}"
+    peer_region: "{{ region }}"
+    # Optional values
+    tags: 
+      Name: peering Connection
+      Owner: Seyed Ketabchi
+    region: "{{ region }}"
+    
+    profile: {{ requestor}}
+  register: vpc_peering
+
+###
+### Wait 1 second to create the peering in different regions
+###
+- name: sleep for 1 second to create the peering
+  wait_for: timeout=1
+
+  
+

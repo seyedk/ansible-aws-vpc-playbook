@@ -1,0 +1,40 @@
+---
+
+###
+### Asserts
+###
+
+# Assert that vpc peering name is defined
+
+
+
+###
+### Gather facts about existing VPC´s
+###
+
+# gather_facts_requester.yml returns:
+# aws_vpc_peering_requester_id
+# aws_vpc_peering_requester_name
+###
+### Create peering
+
+
+###
+### Accept peering
+###
+- name: "Accept peering VPC Peering Request from {{ requestor }} "
+  ec2_vpc_peer:
+    # Fixed values
+    state: accept
+    # Looked-up values
+    peering_id: "{{ peering_id }}"
+    # Optional values
+     # Optional values
+    tags: 
+      Name: peering Connection
+      Owner: Seyed Ketabchi
+    region: "{{ region }}"
+    
+    profile: "{{ accepter }}"
+  register: vpc_peering
+  when: not ansible_check_mode

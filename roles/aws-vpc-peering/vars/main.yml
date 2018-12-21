@@ -1,0 +1,16 @@
+---
+
+accepter: NETWORK
+requestor: DEV
+
+region: "us-east-1"
+
+
+# VPC  IDs for Peering
+peering_requestor_id: vpc-0c42dcadf16c47bf9
+peering_accepter_id: vpc-0caab59c08d2e69c4
+
+peering_id: ""
+
+
+
